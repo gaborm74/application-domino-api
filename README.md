@@ -155,8 +155,11 @@ Gets the result of a game
 Returns the winner and each step of the game.
 
 **Hand**: HTML coded UTF8 chars of domino tiles in the player's hand
+
 **Table**: HTML coded UTF8 chars of played domino tiles on the table
+
 **Boneyard**: HTML coded UTF8 chars of domino tiles left in the boneyard
+
 
 ```json
  "result": {
