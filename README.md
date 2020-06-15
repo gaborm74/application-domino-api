@@ -1,86 +1,178 @@
-<p align="center"><img src="https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg" width="400"></p>
-
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
-
-## About Laravel
-
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
-
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
-
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-
-### Community Sponsors
-
-<a href="https://op.gg"><img src="http://opgg-static.akamaized.net/icon/t.rectangle.png" width="150"></a>
-
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
-- [We Are The Robots Inc.](https://watr.mx/)
-- [Understand.io](https://www.understand.io/)
-- [Abdel Elrafa](https://abdelelrafa.com)
-- [Hyper Host](https://hyper.host)
-- [Appoly](https://www.appoly.co.uk)
-- [云软科技](http://www.yunruan.ltd/)
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 # application-domino-api
+
+## * Requirements
+- PHP 7.3+
+- Laravel 7.x
+- MySQL 8.x
+- Your choice of HTTP server
+
+## * Setup
+- Start your HTTP with a vhost set to serve your api app directory
+	-  For this documentation I use https://domino-api.local as server name
+- Start MySQL
+	- Create a database for the app, for this example I'll use *domino-api*
+	- Create a user and password to have access to this database
+	- Update your .env file accordingly
+- Update componenets with Composer
+<code>$composer update</code>
+- Run migration
+<code>$php artisan migrate</code>
+- Start worker queue
+<code>$php artisan queue:work database</code>
+
+#  Usage
+
+## * User and token management
+
+Use the header **Accept: application/json** in every call.
+
+### > Register - POST
+
+https://domino-api.local/api/register
+This will create a user you can use to login and get a token to use the API
+
+#### Required fields
+| Fields |
+| --- |
+|name|
+|email|
+|password|
+|password_confirmation|
+
+### > Login - POST
+https://domino-api.local/api/login
+Login with user credentials, it'll return a token to use with the rest of the calls
+
+#### Required fields
+| Fields |
+| --- |
+|email|
+|password|
+
+### > User - GET
+http://domino-api.local/api/user
+Returns the logged in user's information
+#### Required header
+
+|Key|Value|
+| --- | --- |
+|Authorisation|Bearer \<token\>|
+
+### > Logout - POST
+http://domino-api.local/api/logout
+Logs the user out and revoke the token
+#### Required header
+|Key|Value|
+| --- | --- |
+|Authorisation|Bearer \<token\>|
+
+## * Domino Game
+
+### > Setup - POST
+http://domino-api.local/api/game/setup
+Sets up the game and returns the game ID
+#### Required header
+|Key|Value|
+| --- | --- |
+|Authorisation|Bearer \<token\>|
+#### Required fields
+
+| Name | Description |
+| --- | --- |
+| players | Number of players in the game (2-4) |
+
+#### Response
+Returns a UUID you can use in the calls for game specific data
+
+### > List - GET
+http://domino-api.local/api/game/list
+List all the games in the database. Can be used to get the UUID for a game
+#### Required header
+|Key|Value|
+| --- | --- |
+|Authorisation|Bearer \<token\>|
+
+#### Response
+Returns all data for each game previously set up
+
+### > Start - POST
+http://domino-api.local/api/game/start
+Starts the game in the background.
+#### Required header
+|Key|Value|
+| --- | --- |
+|Authorisation|Bearer \<token\>|
+#### Required fields
+
+| Name | Description |
+| --- | --- |
+| game_session_id | The game UUID deom 'setup' |
+
+#### Response
+Returns a confirmation that the game is running.
+
+### > Status - GET
+http://domino-api.local/api/game/status
+Gets the status field for the game.
+#### Required header
+|Key|Value|
+| --- | --- |
+|Authorisation|Bearer \<token\>|
+#### Required fields
+
+| Name | Description |
+| --- | --- |
+| game_session_id | The game UUID deom 'setup' |
+
+#### Response
+Returns the status of the game:
+
+|Status ID| Description|
+|---|---|
+|0| The game is set up via /api/setup |
+|1| The game is ready to run|
+|2| The game is dispatched to the queue|
+|3| The game job is starting|
+|4| The game is created for running|
+|5| Players are dealt |
+|6| The game has ended|
+|101| An error happened, the log is written to **/var/tmp/game_result_\<game UUID\>**|
+
+### > Result - GET
+http://domino-api.local/api/game/result
+Gets the result of a game
+#### Required header
+|Key|Value|
+| --- | --- |
+|Authorisation|Bearer \<token\>|
+#### Required fields
+
+| Name | Description |
+| --- | --- |
+| game_session_id | The game UUID deom 'setup' |
+
+#### Response
+Returns the winner and each step of the game.
+
+**Hand**: HTML coded UTF8 chars of domino tiles in the player's hand
+**Table**: HTML coded UTF8 chars of played domino tiles on the table
+**Boneyard**: HTML coded UTF8 chars of domino tiles left in the boneyard
+
+```json
+ "result": {
+        "winner": "[1]",
+        "steps": {
+            "1": {
+                "player": 0,
+                "hand": "&#x1F050;&#x1F047;&#x1F048;&#x1F03F;&#x1F057;&#x1F046;&#x1F031;",
+                "table": "",
+                "boneyard": "&#x1F056;&#x1F039;&#x1F061;&#x1F04D;&#x1F05D;&#x1F058;&#x1F054;&#x1F04E;&#x1F055;&#x1F049;&#x1F040;&#x1F05C;&#x1F038;&#x1F05E;&#x1F041;&#x1F05F;&#x1F059;&#x1F04F;&#x1F060;&#x1F05B;&#x1F051;"
+            },
+            "2": {
+                "player": 1,
+                "hand": "&#x1F056;&#x1F039;&#x1F061;&#x1F04D;&#x1F05D;&#x1F058;&#x1F054;",
+                "table": "",
+                "boneyard": "&#x1F04E;&#x1F055;&#x1F049;&#x1F040;&#x1F05C;&#x1F038;&#x1F05E;&#x1F041;&#x1F05F;&#x1F059;&#x1F04F;&#x1F060;&#x1F05B;&#x1F051;"
+            },
+...
+```
